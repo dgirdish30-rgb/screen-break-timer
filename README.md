@@ -1,60 +1,110 @@
-# Screen Break Timer
+# Screen Break Timer V5
 
-A deliberately slow, friction-full timer that interrupts screen time with grace, not punishment.
+A timer that interrupts screen habits with a clear, gentle voice instead of trying to hold attention.
 
-## What It Does
+## What V5 Adds
 
-You press Start. The timer counts down for 25 minutes. When it finishes, it makes itself visible—a gentle sound, a subtle pulse—and asks you to step away from the screen.
-
-No tracking. No shame. No snooze. Just a small tool that creates friction at the moment you need it most.
+- Optional browser voice updates using the built-in Web Speech API.
+- A voice toggle so the user stays in control.
+- Spoken start, pause, reset, minute updates, and completion messages.
+- The existing soft completion chime and visual pulse remain.
+- Voice is local to the browser. There is no speech API server and no account.
 
 ## How to Use
 
-1. Open `index.html` in your browser
-2. Press **Start**
-3. Step away from your screen for 25 minutes
-4. When the timer ends, honor the commitment
+1. Open `index.html` in a modern browser.
+2. Leave **Voice updates** checked or turn it off.
+3. Press **Start**.
+4. The timer speaks a short update when it starts, at useful time points, and when it finishes.
+5. Press **Pause** or **Reset** whenever you choose.
 
-## Why 25 Minutes?
+The timer is still set to 25 minutes in this version. The voice does not speak every second because that would become distracting.
 
-The tool is fixed at 25 minutes—the Pomodoro interval. Not because 25 is magic, but because having *no choice* removes the friction of deciding. The point is the pattern, not the duration.
+## Seven Back-End Answers
 
-## Design Philosophy
+### 1. What data does this tool need?
 
-This timer is built on the premise that behavior change requires **repeated small frictions at the moment of choice**.
+It only needs the timer duration, the remaining time, the timer state, and whether voice updates are on.
 
-- **It refuses to disappear.** Full screen. No alt-tabbing away.
-- **It doesn't punish you.** No judgment. No data. No streak counter.
-- **It trusts you.** You can close it anytime. Breaking it once is not failure.
-- **It aims to work the next 50 times.** Each time you honor it, the next time is easier.
+### 2. Where is it stored?
 
-## Behavioral Thesis
+The timer state exists in the browser while the page is open. Voice settings are also only held in the page. Nothing is uploaded.
 
-The tool believes:
+### 3. Is it temporary or persistent?
 
-> You will honor a commitment you make to yourself if honoring it requires less energy than breaking it.
+The data is temporary. Closing the page clears the timer state. This is intentional because the tool does not need a personal history.
 
-Repetition builds grooves. Each time you step away, the pattern becomes slightly more real. The timer is a small anchor, not a guard.
+### 4. Does the system need memory between sessions?
 
-## What It Refuses
+No. The tool should not build a profile of the user. Each timer is a new choice.
 
-- Gamification (no streaks, badges, or social comparison)
-- Shame (no guilt metrics or tracking)
-- Lock-in (you can always close it)
-- Addictiveness (no rewards, notifications, or pull)
-- Surveillance (no data storage)
+### 5. Does the system require AI inference?
 
-## Technical
+No. The spoken messages are fixed phrases. The browser's built-in speech synthesis reads them aloud.
 
-- **No backend.** Pure HTML, CSS, JavaScript.
-- **No dependencies.** Runs in any modern browser.
-- **No tracking.** What you do after the timer ends is your business.
-- **Fullscreen mode.** Requests fullscreen when running (with graceful fallback).
+### 6. How many API calls are realistically required?
 
-## Atmosphere
+Zero. The project uses no backend and no external API calls.
 
-Calm. Steady. Like a grandfather clock in the corner of a room. You notice it when it matters. The sound at the end is not an alarm—it's a gentle hand on your shoulder saying, *"We agreed. Time to step away."*
+### 7. What happens if the API fails?
 
----
+There is no external API to fail. If speech synthesis is unavailable, the timer still works with its visual display and completion chime. The voice checkbox is disabled and the user is told why.
 
-**Built for the Summit on Human Dignity module on designing tools that interrupt, not exploit.**
+## Architecture
+
+### Input Layer
+
+- Start button
+- Pause button
+- Reset button
+- Voice updates checkbox
+
+### Logic Layer
+
+- Countdown interval
+- Timer state changes
+- Time announcements
+- Speech synthesis messages
+- Completion sound
+- Fullscreen request with fallback
+
+### Output Layer
+
+- Countdown display
+- State label
+- Voice announcement
+- Completion chime
+- Visual pulse
+
+## Break Log
+
+### What Changed
+
+The V5 version adds a basic voice layer to the existing timer. The browser now says what is happening at important moments:
+
+- "Timer started"
+- Useful remaining-time updates
+- "Timer paused"
+- "Timer reset"
+- "Your timer is finished"
+
+The voice can be turned off. It does not speak every second because that would replace one distraction with another.
+
+### What Went Wrong Before
+
+- The earlier timer only changed text and played a sound, so a user could miss what happened if they were not looking at the screen.
+- The original audio code created a new audio context at the end, which some browsers may block because audio normally needs a user gesture first.
+- The old version did not have Pause or Reset controls, so the user had less control once the timer started.
+- The timer originally requested fullscreen without explaining that it could fail. V5 keeps fullscreen as an optional enhancement and continues normally if the browser rejects it.
+- A spoken update for every second would be technically possible but would be annoying and would conflict with the tool's calm purpose. V5 only speaks meaningful events.
+
+### Remaining Limits
+
+- Voice availability depends on the browser and device.
+- The exact voice may sound different on different operating systems.
+- Speech synthesis may stop if the browser tab is backgrounded.
+- The tool is a reminder, not treatment or a replacement for professional support.
+
+## Behavior Integrity Check
+
+This version still interrupts at the chosen time and gives the user control. It does not shame, monitor, score, or manipulate the user. Voice is an optional accessibility and awareness layer, not a way to make the tool harder to escape.

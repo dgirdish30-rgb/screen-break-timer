@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screen Break Timer</title>
+    <title>Screen Break Timer V5</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,12 +12,20 @@
             <div class="time" id="timeText">25:00</div>
             <div class="state" id="stateText">Ready</div>
         </div>
-        
-        <button class="start-button" id="startBtn">Start</button>
-        
+
+        <div class="controls">
+            <label class="voice-control">
+                <input type="checkbox" id="voiceToggle" checked>
+                <span>Voice updates</span>
+            </label>
+            <button class="start-button" id="startBtn">Start</button>
+            <button class="secondary-button" id="pauseBtn">Pause</button>
+            <button class="secondary-button" id="resetBtn">Reset</button>
+        </div>
+
         <div class="instructions" id="instructions">
             <p>Set a timer. Step away from the screen.</p>
-            <p>Honor what you commit to.</p>
+            <p id="voiceStatus">Voice updates are on.</p>
         </div>
     </div>
 
