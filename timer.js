@@ -16,19 +16,39 @@ class ScreenBreakTimer {
         this.resetBtn = document.getElementById('resetBtn');
         this.voiceToggle = document.getElementById('voiceToggle');
         this.voiceStatus = document.getElementById('voiceStatus');
+        this.buddyText = document.getElementById('buddyText');
+        this.buddyButton = document.getElementById('buddyButton');
 
         this.startBtn.addEventListener('click', () => this.start());
         this.pauseBtn.addEventListener('click', () => this.pause());
         this.resetBtn.addEventListener('click', () => this.reset());
         this.voiceToggle.addEventListener('change', () => this.toggleVoice());
+        this.buddyButton.addEventListener('click', () => this.buddyPrompt());
 
         this.updateDisplay();
+        this.setBuddyText('I\'m here when you want to pause.');
     }
 
     formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    setBuddyText(message) {
+        this.buddyText.textContent = message;
+    }
+
+    buddyPrompt() {
+        const options = [
+            'Let\'s take one breath together.',
+            'You do not have to do this alone.',
+            'A pause is a choice, not a failure.',
+            'You are allowed to stop and reset.'
+        ];
+        const choice = options[Math.floor(Math.random() * options.length)];
+        this.setBuddyText(choice);
+        this.speak(choice);
     }
 
     updateDisplay() {
@@ -70,6 +90,7 @@ class ScreenBreakTimer {
         this.timerDisplay.classList.add('active');
         this.timerDisplay.classList.remove('complete');
         this.stateText.textContent = 'Running';
+        this.setBuddyText('We can take this one minute at a time.');
         this.speak(`Timer started. ${this.minutesMessage()} remaining.`);
 
         this.requestFullscreen();
@@ -92,6 +113,7 @@ class ScreenBreakTimer {
         this.isPaused = true;
         this.stateText.textContent = 'Paused';
         this.updateDisplay();
+        this.setBuddyText('Pause is allowed. We can reset when you are ready.');
         this.speak(`Timer paused at ${this.minutesMessage()}.`);
     }
 
@@ -105,6 +127,7 @@ class ScreenBreakTimer {
         this.timerDisplay.classList.remove('active', 'complete');
         this.stateText.textContent = 'Ready';
         this.updateDisplay();
+        this.setBuddyText('Ready when you are.');
         this.speak('Timer reset. Ready when you are.');
     }
 
@@ -120,6 +143,7 @@ class ScreenBreakTimer {
         if (minute > 0 && minute !== this.lastAnnouncedMinute) {
             this.lastAnnouncedMinute = minute;
             if (minute <= 5 || minute % 5 === 0) {
+                this.setBuddyText(`Almost there. ${minute} minute${minute === 1 ? '' : 's'} left.`);
                 this.speak(`${minute} minute${minute === 1 ? '' : 's'} remaining.`);
             }
         }
@@ -133,6 +157,7 @@ class ScreenBreakTimer {
         this.timerDisplay.classList.add('complete');
         this.stateText.textContent = 'Time to Step Away';
         this.updateDisplay();
+        this.setBuddyText('You made it. It is okay to step away.');
         this.speak('Your timer is finished. It is time to step away from the screen.');
         this.playNotification();
         this.exitFullscreen();
