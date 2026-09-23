@@ -3,17 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#dceee5">
     <title>Screen Break Timer V5</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="timer-display" id="timerDisplay">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="ambient ground-glow" aria-hidden="true"></div>
+
+    <main class="container">
+        <p class="eyebrow">A quiet moment for your attention</p>
+
+        <section class="timer-display" id="timerDisplay" aria-live="polite">
             <div class="time" id="timeText">25:00</div>
             <div class="state" id="stateText">Ready</div>
-        </div>
+        </section>
 
-        <div class="controls">
+        <div class="controls" aria-label="Timer controls">
             <label class="voice-control">
                 <input type="checkbox" id="voiceToggle" checked>
                 <span>Voice updates</span>
@@ -24,10 +31,10 @@
         </div>
 
         <div class="instructions" id="instructions">
-            <p>Set a timer. Step away from the screen.</p>
+            <p>Set a timer, then let the screen become quiet.</p>
             <p id="voiceStatus">Voice updates are on.</p>
         </div>
-    </div>
+    </main>
 
     <script src="timer.js"></script>
 </body>

@@ -58,9 +58,7 @@ class ScreenBreakTimer {
             window.speechSynthesis.cancel();
         }
 
-        if (this.voiceEnabled) {
-            this.speak('Voice updates are on.');
-        }
+        if (this.voiceEnabled) this.speak('Voice updates are on.');
     }
 
     start() {
@@ -81,9 +79,7 @@ class ScreenBreakTimer {
             this.updateDisplay();
             this.announceMinuteChange();
 
-            if (this.timeRemaining <= 0) {
-                this.complete();
-            }
+            if (this.timeRemaining <= 0) this.complete();
         }, 1000);
     }
 
@@ -115,10 +111,7 @@ class ScreenBreakTimer {
     minutesMessage() {
         const minutes = Math.floor(this.timeRemaining / 60);
         const seconds = this.timeRemaining % 60;
-
-        if (minutes > 0) {
-            return `${minutes} minute${minutes === 1 ? '' : 's'}`;
-        }
+        if (minutes > 0) return `${minutes} minute${minutes === 1 ? '' : 's'}`;
         return `${seconds} second${seconds === 1 ? '' : 's'}`;
     }
 
@@ -140,10 +133,8 @@ class ScreenBreakTimer {
         this.timerDisplay.classList.add('complete');
         this.stateText.textContent = 'Time to Step Away';
         this.updateDisplay();
-
         this.speak('Your timer is finished. It is time to step away from the screen.');
         this.playNotification();
-        this.pulse();
         this.exitFullscreen();
     }
 
@@ -153,7 +144,6 @@ class ScreenBreakTimer {
 
         const audioContext = new AudioContext();
         const now = audioContext.currentTime;
-
         for (let i = 0; i < 2; i++) {
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
@@ -169,24 +159,13 @@ class ScreenBreakTimer {
         }
     }
 
-    pulse() {
-        this.timerDisplay.style.animation = 'none';
-        setTimeout(() => {
-            this.timerDisplay.style.animation = 'pulse 1s ease-out';
-        }, 10);
-    }
-
     requestFullscreen() {
         const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen().catch(() => {});
-        }
+        if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
     }
 
     exitFullscreen() {
-        if (document.fullscreenElement && document.exitFullscreen) {
-            document.exitFullscreen();
-        }
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
     }
 }
 
@@ -201,16 +180,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new ScreenBreakTimer();
 });
-
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes pulse {
-        0% { transform: scale(1); opacity: 1; }
-        100% { transform: scale(1.05); opacity: 0.8; }
-    }
-
-    .timer-display.complete {
-        animation: pulse 2s ease-out infinite;
-    }
-`;
-document.head.appendChild(style);

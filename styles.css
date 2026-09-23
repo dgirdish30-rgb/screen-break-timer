@@ -4,55 +4,138 @@
     box-sizing: border-box;
 }
 
-html, body {
+:root {
+    --forest-deep: #173326;
+    --forest-mid: #416b54;
+    --forest-soft: #dceee5;
+    --paper: rgba(255, 255, 255, 0.68);
+    --line: rgba(23, 51, 38, 0.28);
+    --warm-accent: #9b5d45;
+}
+
+html,
+body {
     width: 100%;
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #dceee5 0%, #a8cdb8 100%);
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--forest-deep);
+}
+
+body {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     overflow: hidden;
-    color: #173326;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.35), transparent 42%),
+        linear-gradient(135deg, #eaf6ef 0%, var(--forest-soft) 48%, #a8cdb8 100%);
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .32;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(23, 51, 38, .018) 0,
+        rgba(23, 51, 38, .018) 1px,
+        transparent 1px,
+        transparent 7px
+    );
+}
+
+.ambient {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(8px);
+    will-change: transform;
+}
+
+.ambient-one {
+    width: 42vw;
+    height: 42vw;
+    max-width: 540px;
+    max-height: 540px;
+    top: -18vw;
+    left: -12vw;
+    background: rgba(255, 255, 255, .5);
+    animation: drift-one 18s ease-in-out infinite alternate;
+}
+
+.ambient-two {
+    width: 34vw;
+    height: 34vw;
+    max-width: 420px;
+    max-height: 420px;
+    right: -12vw;
+    top: 18vh;
+    background: rgba(105, 157, 125, .16);
+    animation: drift-two 23s ease-in-out infinite alternate;
+}
+
+.ground-glow {
+    width: 70vw;
+    height: 20vw;
+    bottom: -13vw;
+    left: 15vw;
+    background: rgba(38, 91, 62, .15);
+    filter: blur(28px);
 }
 
 .container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2rem, 680px);
+    padding: clamp(2rem, 7vw, 5rem);
     text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--paper);
+    box-shadow: 0 20px 60px rgba(35, 73, 52, .12);
+    backdrop-filter: blur(10px);
+}
+
+.eyebrow {
+    margin-bottom: 2.5rem;
+    color: var(--forest-mid);
+    font-size: .75rem;
+    letter-spacing: .16em;
+    line-height: 1.4;
+    text-transform: uppercase;
 }
 
 .timer-display {
-    margin-bottom: 2.2rem;
+    margin-bottom: 2.7rem;
+    transition: opacity 600ms ease, transform 900ms cubic-bezier(.2,.8,.2,1);
 }
 
 .time {
-    font-size: 8rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    line-height: 1;
+    color: var(--forest-deep);
+    font-family: "Courier New", monospace;
+    font-size: clamp(4rem, 14vw, 8rem);
     font-variant-numeric: tabular-nums;
-    color: #163a29;
-    text-shadow: 0 2px 20px rgba(35, 73, 52, 0.2);
-    font-family: 'Courier New', monospace;
-    margin-bottom: 1rem;
+    font-weight: 300;
+    letter-spacing: .08em;
+    line-height: 1;
+    text-shadow: 0 3px 24px rgba(35, 73, 52, .16);
 }
 
 .state {
-    font-size: 1.2rem;
-    letter-spacing: 0.15em;
+    margin-top: 1.1rem;
+    color: var(--forest-mid);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: .14em;
     text-transform: uppercase;
-    color: #416b54;
-    font-weight: 400;
-    transition: color 0.3s ease;
+    transition: color 700ms ease;
 }
 
-.timer-display.active .state { color: #9b5d45; }
+.timer-display.active .state { color: var(--warm-accent); }
 .timer-display.complete .state { color: #2d704a; }
 
 .controls {
@@ -60,77 +143,108 @@ html, body {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 0.7rem;
+    gap: .7rem;
+}
+
+button,
+.voice-control {
+    min-height: 44px;
 }
 
 .start-button,
 .secondary-button {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    letter-spacing: 0.08em;
+    padding: .9rem 1.45rem;
+    border: 1px solid var(--forest-deep);
+    border-radius: 999px;
+    font-size: .82rem;
+    letter-spacing: .08em;
     text-transform: uppercase;
-    border: 1px solid #173326;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    transition: transform 250ms ease, box-shadow 250ms ease, background 250ms ease;
 }
 
 .start-button {
-    background: #173326;
-    color: #ffffff;
+    background: var(--forest-deep);
+    color: #fff;
 }
 
 .secondary-button {
-    background: rgba(255, 255, 255, 0.58);
-    color: #173326;
+    background: rgba(255, 255, 255, .5);
+    color: var(--forest-deep);
 }
 
 .start-button:hover:not(:disabled),
-.secondary-button:hover:not(:disabled) {
+.secondary-button:hover:not(:disabled),
+.start-button:focus-visible,
+.secondary-button:focus-visible {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(35, 73, 52, 0.18);
+    box-shadow: 0 8px 20px rgba(35, 73, 52, .16);
+    outline: none;
 }
 
 button:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: .45;
 }
 
 .voice-control {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    color: #234d37;
-    font-size: 0.9rem;
+    gap: .45rem;
+    color: var(--forest-mid);
+    font-size: .88rem;
 }
 
-.voice-control input {
-    accent-color: #234d37;
-}
+.voice-control input { accent-color: var(--forest-deep); }
 
 .instructions {
-    position: absolute;
-    bottom: 4rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #416b54;
-    max-width: 400px;
+    margin-top: 2.5rem;
+    color: var(--forest-mid);
+    font-size: .9rem;
+    line-height: 1.7;
+    transition: opacity 700ms ease;
 }
 
-.instructions p { margin: 0.5rem 0; }
+.instructions p + p {
+    margin-top: .35rem;
+    font-size: .78rem;
+    opacity: .8;
+}
 
 .timer-display.active ~ .instructions {
-    opacity: 0;
-    pointer-events: none;
+    opacity: .42;
 }
 
-@media (max-width: 768px) {
-    .time { font-size: 5rem; }
-    .start-button, .secondary-button { padding: 0.8rem 1rem; }
+.timer-display.complete {
+    animation: complete-breath 1500ms ease-in-out infinite alternate;
 }
 
-@media (max-width: 480px) {
-    .time { font-size: 3.5rem; }
-    .controls { max-width: 320px; }
-    .instructions { font-size: 0.85rem; bottom: 2rem; }
+@keyframes complete-breath {
+    from { transform: scale(1); }
+    to { transform: scale(1.025); }
+}
+
+@keyframes drift-one {
+    from { transform: translate3d(-1%, -1%, 0) scale(1); }
+    to { transform: translate3d(3%, 2%, 0) scale(1.04); }
+}
+
+@keyframes drift-two {
+    from { transform: translate3d(1%, 0, 0); }
+    to { transform: translate3d(-4%, 3%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .container { border-radius: 22px; }
+    .controls { max-width: 320px; margin: 0 auto; }
+    .instructions { margin-top: 2rem; }
 }
