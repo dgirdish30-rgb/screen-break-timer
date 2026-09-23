@@ -26,7 +26,7 @@ class ScreenBreakTimer {
         this.buddyButton.addEventListener('click', () => this.buddyPrompt());
 
         this.updateDisplay();
-        this.setBuddyText('I\'m here when you want to pause.');
+        this.setBuddyText('I’m here when you want to pause.');
     }
 
     formatTime(seconds) {
@@ -41,7 +41,7 @@ class ScreenBreakTimer {
 
     buddyPrompt() {
         const options = [
-            'Let\'s take one breath together.',
+            'Let’s take one breath together.',
             'You do not have to do this alone.',
             'A pause is a choice, not a failure.',
             'You are allowed to stop and reset.'
@@ -198,9 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!('speechSynthesis' in window)) {
         const toggle = document.getElementById('voiceToggle');
         const status = document.getElementById('voiceStatus');
+        status.textContent = 'Voice updates are not supported in this browser.';
         toggle.checked = false;
         toggle.disabled = true;
-        status.textContent = 'Voice updates are not supported in this browser.';
     }
 
     new ScreenBreakTimer();
